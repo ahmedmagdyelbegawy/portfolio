@@ -1210,6 +1210,7 @@ body:hover .cursor-follower {
     align-items: center;
     z-index: 10002;
     transition: opacity 0.8s ease, visibility 0.8s;
+    opacity:0.1;
 }
 
 #preloader.fade-out {
@@ -1882,4 +1883,5 @@ body:hover .cursor-follower {
 .mobile-nav-link:active {
     color: var(--accent-color);
     transform: scale(0.95);
+
 }
