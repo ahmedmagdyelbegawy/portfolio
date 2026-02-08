@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Agent Ducky Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="projects-panels.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- GSAP & Lenis CDNs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <!-- Jquery -->
+    <script charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script>
+        $(document).on('click', 'a[href^="#"]', function (event) {
+            event.preventDefault();
+            $('html, body').animate({
+                scrollTop: $($.attr(this, 'href')).offset().top
+            }, 1500);
+        });
+    </script>
+    <!-- Mobile Theme Colors -->
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+    <!-- iOS Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+</head>
+
+<body>
+
+    <!-- Scrollbar -->
+    <div id="scrollbar-track">
+        <div id="scrollbar-thumb"></div>
+    </div>
+
+    <!-- Cosmic Background -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Noise -->
+    <div class="noise-overlay"></div>
+
+    <!-- Preloader -->
+    <div id="preloader">
+
+        <div class="loader-content">
+            <svg class="loader-duck" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+                <g stroke="var(--accent-color)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                    filter="url(#soft-shadow)">
+
+                    <!-- 1. Spine: Draws Bottom to Top -->
+                    <path class="p-spine" d="M12 21 L12 4"></path>
+
+                    <!-- 2. Head: Draws Top to Center -->
+                    <path class="p-head" d="M12 4 L8 4 L3.5 6.5 L8 9 L12 9"></path>
+
+                    <!-- 3. Wing: Draws Center to Bottom -->
+                    <path class="p-wing" d="M12 9 L6.5 15.5 L12 21"></path>
+
+                    <!-- 
+                   4. Tail: UPDATED to Draw Bottom to Up
+                   Original: M12 14.5 L19 14.5 L12 21
+                   New:      M12 21 L19 14.5 L12 14.5 
+                   (This creates the seamless flow from the wing's endpoint)
+                -->
+                    <path class="p-tail" d="M12 21 L19 14.5 L12 14.5"></path>
+
+                </g>
+            </svg>
+            <div class="loader-text">LOADING</div>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-follower"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="brand">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    style="margin: 0 -10px;height: 50px;">
+                    <g stroke="var(--accent-color)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                        <!-- Vertical Spine -->
+                        <path d="M12 21 L12 4"></path>
+                        <!-- Head and Beak -->
+                        <path d="M12 4 L8 4 L3.5 6.5 L8 9 L12 9"></path>
+                        <!-- Left Body/Wing -->
+                        <path d="M12 9 L6.5 15.5 L12 21"></path>
+                        <!-- Right Tail -->
+                        <path d="M12 14.5 L19 14.5 L12 21"></path>
+                    </g>
+                </svg>
+                <span class="logo-text logo-text-shift">Agent Ducky</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#hero-section">Home</a></li>
+                    <li><a href="#services-section">Services</a></li>
+                    <li><a href="#projects-section">Experience</a></li>
+                </ul>
+            </nav>
+            <div class="btn-container">
+                <button class="tech-btn icon-btn">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="square" stroke-linejoin="miter">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                </button>
+
+                <!-- Text Button -->
+                <button class="tech-btn text-btn">
+                    <span class="text">CONTACT US</span>
+                </button>
+
+                <!-- Menu Icon Button -->
+                <button class="tech-btn icon-btn menu-btn">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="square" stroke-linejoin="miter">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+        </header>
+
+        <!-- Hero Section -->
+
+        <section class="hero-section" id="hero-section">
+            <div class="big-watermark">DUCKY</div>
+            <div class="hero-light"></div>
+            <!-- Central Visual -->
+            <div class="main-duck-wrapper">
+            </div>
+            <div class="blur-wrapper">
+                <div class="masked-shape"></div>
+            </div>
+
+            <!-- Japanese Text (Positioned relative to duck) -->
+            <div class="japanese-text char-reveal">
+                <span class="reveal reveal-delay-1">シ</span>
+                <span class="reveal reveal-delay-2">ス</span>
+                <span class="reveal reveal-delay-3">テ</span>
+                <span class="reveal reveal-delay-4">ム</span>
+            </div>
+
+            <div class="hero-left">
+                <h2 class="char-reveal">
+                    <p class="reveal reveal-delay-1">DESIGN IS EASY.</p>
+                    <p class="reveal reveal-delay-2 hero-text-2">ENGINEERING IS HARD.</p>
+                    <p class="reveal reveal-delay-3 hero-text-3">WE DO</p>
+                    <p class="reveal reveal-delay-4 hero-text-4">BOTH.</p>
+                </h2>
+
+                <a href="#" class="cta-brush reveal">
+                    Let’s Talk
+                </a>
+
+                <div class="hero-stats">
+                    <div class="hero-stats-en">
+                        22-01
+                    </div>
+                    <div class="hero-stats-ch">
+                        这些只是一些中文文本<br>它们有助于美化网站<br>其实没什么用
+                    </div>
+                </div>
+            </div>
+            <div class="hero-right">
+                <div class="cta-brush-vid-container reveal">
+                    <div class="cta-brush-vid-img"></div>
+                    <a href="#" class="cta-brush-vid">
+
+                    </a>
+                    <button class="tech-btn icon-btn filled-btn">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                    </button>
+                </div>
+                <div class="hero-stats-r8">
+                    +300<br>finished<br>Projects</div>
+
+            </div>
+
+        </section>
+
+        <!-- Divider / Mission -->
+        <section class="services-section" id="services-section">
+            <div class="big-watermark watermark-1">DUCKY
+            </div>
+            <div class="big-watermark watermark-2">DUCKY
+            </div>
+            <div class="big-watermark watermark-3">DUCKY
+            </div>
+            <h2 class="reveal char-reveal">
+                <p class="highlight">Beyond Features,</p>
+                <p class="services-text-2">We Deliver</p>
+                <p class="highlight services-text-3">Enduring Systems.</p>
+            </h2>
+            <div class="services-stats-r">
+                <div class="services-stats-ch">
+                    这些只是一些中文文本<br>它们有助于美化网站<br>其实没什么用
+                </div>
+            </div>
+
+            <div class="services-stats-l">
+
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    style="margin: 0 -10px;height: 50px;">
+                    <g stroke="var(--accent-color)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                        <!-- Vertical Spine -->
+                        <path d="M12 21 L12 4"></path>
+                        <!-- Head and Beak -->
+                        <path d="M12 4 L8 4 L3.5 6.5 L8 9 L12 9"></path>
+                        <!-- Left Body/Wing -->
+                        <path d="M12 9 L6.5 15.5 L12 21"></path>
+                        <!-- Right Tail -->
+                        <path d="M12 14.5 L19 14.5 L12 21"></path>
+                    </g>
+                </svg>
+            </div>
+
+            <!-- Services Section -->
+            <div class="services-grid">
+
+                <div class="service-divider"></div>
+
+                <!-- Item 1 -->
+                <div class="service-item reveal">
+                    <div class="service-bg">
+                        <div class="service-bg-left"></div>
+                        <div class="service-bg-center"></div>
+                        <div class="service-bg-right"></div>
+                    </div>
+                    <div class="service-visual">
+                        <!-- Optional thumbnail -->
+                    </div>
+                    <div class="service-info">
+                        <h3>FRONTEND ARCHITECTURE</h3>
+                        <p>Building responsive, high-performance interfaces with React, Next.js, and modern CSS.</p>
+                    </div>
+                    <div class="japanese-text">
+                        システム
+                    </div>
+                    <div class="service-number">01</div>
+                </div>
+
+                <div class="service-divider"></div>
+
+                <!-- Item 2 -->
+                <div class="service-item reveal">
+                    <div class="service-bg">
+                        <div class="service-bg-left"></div>
+                        <div class="service-bg-center"></div>
+                        <div class="service-bg-right"></div>
+                    </div>
+
+                    <div class="service-visual">
+                        <!-- Optional thumbnail -->
+                    </div>
+                    <div class="service-info">
+                        <h3>BACKEND SYSTEMS</h3>
+                        <p>Robust server-side solutions, API design, and scalable database management.</p>
+                    </div>
+                    <div class="japanese-text">
+                        システム
+                    </div>
+                    <div class="service-number">02</div>
+                </div>
+
+                <div class="service-divider"></div>
+
+                <!-- Item 3 -->
+                <div class="service-item reveal">
+                    <div class="service-bg">
+                        <div class="service-bg-left"></div>
+                        <div class="service-bg-center"></div>
+                        <div class="service-bg-right"></div>
+                    </div>
+                    <div class="service-visual">
+                        <!-- Optional thumbnail -->
+                    </div>
+                    <div class="service-info">
+                        <h3>RANGE OF SERVICES</h3>
+                        <p>From landing pages to complex web applications.</p>
+                    </div>
+                    <div class="japanese-text">
+                        システム
+                    </div>
+                    <div class="service-number">03</div>
+                </div>
+
+                <div class="service-divider"></div>
+
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section class="projects-section" id="projects-section">
+            <div class="big-watermark">EXPERIENCE</div>
+            <div class="projects-bg"></div>
+            <div class="projects-bg-color"></div>
+            <h2 class="reveal char-reveal">
+                <span class="highlight"><span class="char" style="--delay: 0s;">E</span><span class="char"
+                        style="--delay: 0.02s;">X</span><span class="char" style="--delay: 0.04s;">P</span><span
+                        class="char" style="--delay: 0.06s;">L</span><span class="char"
+                        style="--delay: 0.08s;">O</span><span class="char" style="--delay: 0.1s;">R</span><span
+                        class="char" style="--delay: 0.12s;">E</span></span>
+                <br><span style="margin-left: 8rem;"><span class="char" style="--delay: 0.14s;">O</span><span
+                        class="char" style="--delay: 0.16s;">U</span><span class="char"
+                        style="--delay: 0.18s;">R</span></span><span>&nbsp;</span><span class="highlight"><span
+                        class="char" style="--delay: 0.2s;">E</span><span class="char"
+                        style="--delay: 0.22s;">X</span><span class="char" style="--delay: 0.24s;">P</span><span
+                        class="char" style="--delay: 0.26s;">E</span><span class="char"
+                        style="--delay: 0.28s;">R</span><span class="char" style="--delay: 0.3s;">I</span><span
+                        class="char" style="--delay: 0.32s;">E</span><span class="char"
+                        style="--delay: 0.34s;">N</span><span class="char" style="--delay: 0.36s;">C</span><span
+                        class="char" style="--delay: 0.38s;">E</span></span>
+            </h2>
+
+            <div class="experience-horizontal-container">
+                <div class="experience-horizontal-wrapper">
+                    <div class="experience-grid">
+                        <!-- Experience Card 1 -->
+                        <div class="experience-card">
+                            <div class="card-content">
+                                <div class="card-info">
+                                    <div class="card-meta">
+                                        <span class="card-slash">///</span>
+                                        <p class="card-description">
+                                            IDK, PUT SOME FRECKING DETAILS HERE
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card-visual">
+                                    <div class="card-image-box" style="background-image: url(1.png);"></div>
+                                </div>
+                            </div>
+                            <div class="card-label">
+                                <span>/METAVERSE</span>
+                            </div>
+                        </div>
+
+                        <!-- Experience Card 2 -->
+                        <div class="experience-card">
+                            <div class="card-content">
+                                <div class="card-info">
+                                    <div class="card-meta">
+                                        <span class="card-slash">///</span>
+                                        <p class="card-description">
+                                            IDK, PUT SOME FRECKING DETAILS HERE
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card-visual">
+                                    <div class="card-image-box" style="background-image: url(1.png);"></div>
+                                </div>
+                            </div>
+                            <div class="card-label">
+                                <span>/NFT</span>
+                            </div>
+                        </div>
+
+                        <!-- Experience Card 3 -->
+                        <div class="experience-card">
+                            <div class="card-content">
+                                <div class="card-info">
+                                    <div class="card-meta">
+                                        <span class="card-slash">///</span>
+                                        <p class="card-description">
+                                            IDK, PUT SOME FRECKING DETAILS HERE
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card-visual">
+                                    <div class="card-image-box" style="background-image: url(1.png);"></div>
+                                </div>
+                            </div>
+                            <div class="card-label">
+                                <span>/AVATARS</span>
+                            </div>
+                        </div>
+
+                        <!-- Experience Card 4 -->
+                        <div class="experience-card">
+                            <div class="card-content">
+                                <div class="card-info">
+                                    <div class="card-meta">
+                                        <span class="card-slash">///</span>
+                                        <p class="card-description">
+                                            IDK, PUT SOME FRECKING DETAILS HERE
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card-visual">
+                                    <div class="card-image-box" style="background-image: url(1.png);"></div>
+                                </div>
+                            </div>
+                            <div class="card-label">
+                                <span>/MIXED REALITY</span>
+                            </div>
+                        </div>
+
+                        <!-- Experience Card 5 -->
+                        <div class="experience-card">
+                            <div class="card-content">
+                                <div class="card-info">
+                                    <div class="card-meta">
+                                        <span class="card-slash">///</span>
+                                        <p class="card-description">
+                                            IDK, PUT SOME FRECKING DETAILS HERE
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card-visual">
+                                    <div class="card-image-box" style="background-image: url(1.png);"></div>
+                                </div>
+                            </div>
+                            <div class="card-label">
+                                <span>/GAMING</span>
+                            </div>
+                        </div>
+
+                        <!-- Experience Card 6 -->
+                        <div class="experience-card">
+                            <div class="card-content">
+                                <div class="card-info">
+                                    <div class="card-meta">
+                                        <span class="card-slash">///</span>
+                                        <p class="card-description">
+                                            IDK, PUT SOME FRECKING DETAILS HERE
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card-visual">
+                                    <div class="card-image-box" style="background-image: url(1.png);"></div>
+                                </div>
+                            </div>
+                            <div class="card-label">
+                                <span>/AI TECH</span>
+                            </div>
+                        </div>
+
+                        <!-- Experience Card 7 -->
+                        <div class="experience-card">
+                            <div class="card-content">
+                                <div class="card-info">
+                                    <div class="card-meta">
+                                        <span class="card-slash">///</span>
+                                        <p class="card-description">
+                                            IDK, PUT SOME FRECKING DETAILS HERE
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card-visual">
+                                    <div class="card-image-box" style="background-image: url(1.png);"></div>
+                                </div>
+                            </div>
+                            <div class="card-label">
+                                <span>/CLOUD UX</span>
+                            </div>
+                        </div>
+
+                        <!-- Experience Card 8 -->
+                        <div class="experience-card">
+                            <div class="card-content">
+                                <div class="card-info">
+                                    <div class="card-meta">
+                                        <span class="card-slash">///</span>
+                                        <p class="card-description">
+                                            IDK, PUT SOME FRECKING DETAILS HERE
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card-visual">
+                                    <div class="card-image-box" style="background-image: url(1.png);"></div>
+                                </div>
+                            </div>
+                            <div class="card-label">
+                                <span>/CREATIVE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer Section -->
+        <section class="footer-section">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <!-- Brand / Logo -->
+                    <div class="brand">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            style="margin: 0 -10px;height: 50px;">
+                            <g stroke="var(--accent-color)" stroke-width="1" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <!-- Vertical Spine -->
+                                <path d="M12 21 L12 4"></path>
+                                <!-- Head and Beak -->
+                                <path d="M12 4 L8 4 L3.5 6.5 L8 9 L12 9"></path>
+                                <!-- Left Body/Wing -->
+                                <path d="M12 9 L6.5 15.5 L12 21"></path>
+                                <!-- Right Tail -->
+                                <path d="M12 14.5 L19 14.5 L12 21"></path>
+                            </g>
+                        </svg>
+                        <span class="logo-text logo-text-shift">Agent Ducky</span>
+                    </div>
+
+                    <!-- Copyright -->
+                    <div class="footer-copyright">
+                        <p>&copy; 2025 <span class="logo-text-shift">Agent Ducky</span></p>
+                        <p>Fullstack Web Developer</p>
+                    </div>
+                </div>
+                <div class="footer-right">
+
+                    <!-- Social Icons -->
+                    <div class="footer-socials">
+                        <a href="#" class="social-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                            </svg> <!-- Placeholder for Telegram/Plane -->
+                        </a>
+                        <a href="#" class="social-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 19H7v-9h2v9zm-1-10.3c-.7 0-1.3-.6-1.3-1.3 0-.7.6-1.3 1.3-1.3.7 0 1.3.6 1.3 1.3 0 .7-.6 1.3-1.3 1.3zM18 19h-2v-5.2c0-1.4-.8-1.9-1.5-1.9-.9 0-1.5.7-1.5 2V19h-2v-9h2.1v1.1c.5-.8 1.4-1.3 2.5-1.3 2 0 2.4 1.5 2.4 3.4V19z" />
+                            </svg> <!-- Placeholder for WhatsApp/Chat -->
+                        </a>
+                        <a href="#" class="social-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M19,5A1,1 0 0,1 20,6A1,1 0 0,1 19,7A1,1 0 0,1 18,6A1,1 0 0,1 19,5Z" />
+                            </svg> <!-- Placeholder for Instagram -->
+                        </a>
+                    </div>
+
+                    <!-- Project Button -->
+                    <button class="tech-btn text-btn filled-btn">
+                        <span class="text">DISSCUSS A PROJECT</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay">
+        <button class="tech-btn icon-btn mobile-menu-close">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="square" stroke-linejoin="miter">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <nav class="mobile-nav">
+            <a href="#hero-section" class="mobile-nav-link">HOME</a>
+            <a href="#services-section" class="mobile-nav-link">SERVICES</a>
+            <a href="#projects-section" class="mobile-nav-link">PROJECTS</a>
+        </nav>
+    </div>
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>
