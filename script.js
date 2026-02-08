@@ -190,21 +190,30 @@ const hidePreloader = () => {
     if (!preloader || preloader.classList.contains('fade-out')) return;
 
     const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
     if (isTouchDevice) {
         document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
     } else {
         initGSAP();
     }
+
     preloader.classList.add('fade-out');
     console.log("Preloader hidden");
 };
 
-window.addEventListener('load', () => {
-    setTimeout(hidePreloader, 800); // Reduced delay for better UX
+// Wait for EVERYTHING
+const waitForAssets = async () => {
+    await new Promise(resolve => window.addEventListener('load', resolve));
+    await document.fonts.ready; // 👈 waits for all fonts
+};
+
+waitForAssets().then(() => {
+    setTimeout(hidePreloader, 800);
 });
 
-// Fallback: Force hide preloader after 4 seconds regardless of load event
+// Hard fallback (never leave user stuck)
 setTimeout(hidePreloader, 4000);
+
 
 // --- Mouse Tracking & Glow/Grid ---
 let mouseX = 0, mouseY = 0;
@@ -476,4 +485,5 @@ window.addEventListener('resize', () => {
 });
 
 // Run once on load
+
 updateThumbSize();
